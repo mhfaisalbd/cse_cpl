@@ -97,9 +97,13 @@ async def create_upload_file(sess: Annotated[AsyncSession, Depends(get_db)],file
 from fastapi.responses import FileResponse
 @router.get("/player/profile/{filename}")
 async def get_uploaded_image(filename: str):
-    image_path = os.path.join("app","photo","player",f"{filename}")
-    return FileResponse(image_path)
-
+    try:
+        image_path = os.path.join("app","photo","player",f"{filename}") 
+        return FileResponse(image_path)
+    except Exception:
+        image_path = os.path.join("app","photo","player","default.png")
+        return FileResponse(image_path)
+        #raise HTTPException(status_code=500, detail="Failed to fetch player image")
 
 # =======================================================================
 # background processing:
